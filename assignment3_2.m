@@ -6,7 +6,7 @@ close all
 TOA = zeros(1101, 1401, 11);
 % convert each channel to TOA, using the given formula
 for i = 1 : 11
-   TOA(:,:,i) = radMult(i) * data(:,:,1) + radAdd(i);
+   TOA(:,:,i) = radMult(i) * data(:,:,i) + radAdd(i);
 end
 
 %% Part 2c
@@ -15,28 +15,18 @@ end
 
 %% part 3a
 close all
+% use the TOA values to calculate NDVI
 NIR = TOA(:,:,5);
 RED = TOA(:,:,4);
 NDVI = (NIR - RED) ./ (NIR + RED);
 
-imshow(NDVI)
-figure
-J = histeq(NDVI, 65536);
-imshow(J)
-
 %% part 3b
 close all
-SWIR = TOA(:,:,6);
-GRE = TOA(:,:,3);
+% use TOA values to calculate NDWI
 TIR = TOA(:,:,10);
 NDWI = (TIR - RED) ./ (TIR + RED);
-% NDWI = (GRE - NIR) ./ (GRE + NIR);
-% NDWI = (NIR - SWIR) ./ (NIR + SWIR);
-imshow(NDWI)
-figure
-H = histeq(NDWI, 65536);
-imshow(J)
 
+% calculate land and sea mask using given treshholds
 land = (NDVI > -0.45) & (NDWI < -0.30);
 sea = ~land;
 
@@ -45,9 +35,16 @@ imshow(land)
 figure
 imshow(sea)
 
+%% part 3c
+% Calculate the sea surface temperature using TOA values and the given
+% formula. 10 and 11 is the thermal infrared TIR bands 1 and 2
+SST = 5.1424 + 0.9558 * TOA(:,:,10) + 0.8365 * (TOA(:,:,10) - TOA(:,:,11));
+figure
+imagesc(SST)
+
 %% Load data
 data = load('landsat8.mat');
-data = cell2mat(struct2cell(data));
+data = double(cell2mat(struct2cell(data)));
 % constants from header file. Needed for TOA calibration
 radMult(1,1) = 1.2548e-02;
 radMult(2,1) = 1.2795e-02;
