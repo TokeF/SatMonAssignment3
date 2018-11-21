@@ -6,7 +6,7 @@ close all
 % display one band as greyscale image.
 % uint16 is an unsigned 16 bit integer. 
 % The range is therefore from 0 to 2^16 = 65536
-n = 5;
+n = 1;
 imshow(data(:,:,n))
 
 figure

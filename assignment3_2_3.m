@@ -19,6 +19,9 @@ close all
 NIR = TOA(:,:,5);
 RED = TOA(:,:,4);
 NDVI = (NIR - RED) ./ (NIR + RED);
+eqNDVI = histeq(NDVI, 65536);
+figure
+imagesc(eqNDVI)
 
 %% part 3b
 close all
@@ -31,9 +34,12 @@ land = (NDVI > -0.45) & (NDWI < -0.30);
 sea = ~land;
 
 figure
+subplot(1,2,1)
 imshow(land)
-figure
+title('Land mask')
+subplot(1,2,2)
 imshow(sea)
+title('Sea mask')
 
 %% part 3c
 % Calculate the sea surface temperature using TOA values and the given
