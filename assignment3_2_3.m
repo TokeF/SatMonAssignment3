@@ -34,10 +34,9 @@ land = (NDVI > -0.45) & (NDWI < -0.30);
 sea = ~land;
 
 figure
-subplot(1,2,1)
 imshow(land)
 title('Land mask')
-subplot(1,2,2)
+figure
 imshow(sea)
 title('Sea mask')
 
