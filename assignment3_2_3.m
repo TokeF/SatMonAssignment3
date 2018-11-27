@@ -3,8 +3,8 @@
 
 %% Part 2b NB!!!! load data in the bottom part first
 close all
-TOA = zeros(1101, 1401, 11);
 % convert each channel to TOA, using the given formula
+TOA = zeros(1101, 1401, 11);
 for i = 1 : 11
    TOA(:,:,i) = radMult(i) * data(:,:,i) + radAdd(i);
 end
@@ -21,6 +21,7 @@ RED = TOA(:,:,4);
 NDVI = (NIR - RED) ./ (NIR + RED);
 eqNDVI = histeq(NDVI, 65536);
 figure
+%Show the NDVI values after histogram equaliztion
 imagesc(eqNDVI)
 
 %% part 3b
@@ -33,6 +34,7 @@ NDWI = (TIR - RED) ./ (TIR + RED);
 land = (NDVI > -0.45) & (NDWI < -0.30);
 sea = ~land;
 
+%Show the land and sea mask
 figure
 imshow(land)
 title('Land mask')
